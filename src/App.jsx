@@ -6,6 +6,7 @@ import Loader from "./components/Loader.jsx";
 import Error from "./components/Error.jsx";
 import StartScreen from "./components/StartScreen.jsx";
 import Questions from "./components/Questions.jsx";
+import NextButton from "./components/NextButton.jsx";
 
 // initialState of useReducer
 const initialState = {
@@ -32,11 +33,17 @@ function reducer(state, action) {
                 status: 'error'
             }
         case 'newAnswer':
-            const question = state.questions.at(state.index)
+            let question = state.questions.at(state.index)
             return {
                 ...state,
                 answer: action.payload,
                 points: action.payload === question.correctOption ? state.points + question.points : state.points,
+            }
+        case 'nextQuestion':
+            return {
+                ...state,
+                index: state.index + 1,
+                answer: null
             }
         case 'start':
             return {
@@ -73,7 +80,10 @@ function App() {
                 {status === 'loading' && <Loader/>}
                 {status === 'error' && <Error/>}
                 {status === 'ready' && <StartScreen questionsLength={questionsLength} dispatch={dispatch}/>}
-                {status === 'active' && <Questions answer={answer} dispatch={dispatch} question={questions[index]}/>}
+                {status === 'active' && <>
+                    <Questions answer={answer} dispatch={dispatch} question={questions[index]}/>
+                    <NextButton answer={answer} dispatch={dispatch} />
+                </>}
             </Main>
         </div>
     )
