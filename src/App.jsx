@@ -48,6 +48,12 @@ function reducer(state, action) {
                 index: state.index + 1,
                 answer: null
             }
+        case 'restartQuestion':
+            return {
+                ...initialState,
+                questions: state.questions,
+                status: 'ready',
+            }
         case 'start':
             return {
                 ...state,
@@ -95,7 +101,7 @@ function App() {
                     <Questions answer={answer} dispatch={dispatch} question={questions[index]}/>
                     <NextButton answer={answer} index={index} questionsLength={questionsLength}  dispatch={dispatch}/>
                 </>}
-                {status === 'finished' && <FinishedScreen points={points} possiblePoints={possiblePoints} highScore={highScore}/>}
+                {status === 'finished' && <FinishedScreen dispatch={dispatch} points={points} possiblePoints={possiblePoints} highScore={highScore}/>}
 
             </Main>
         </div>
