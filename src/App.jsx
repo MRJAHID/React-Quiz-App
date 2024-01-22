@@ -8,6 +8,7 @@ import StartScreen from "./components/StartScreen.jsx";
 import Questions from "./components/Questions.jsx";
 import NextButton from "./components/NextButton.jsx";
 import Progress from "./components/Progress.jsx";
+import FinishedScreen from "./components/FinishedScreen.jsx";
 
 // initialState of useReducer
 const initialState = {
@@ -51,6 +52,11 @@ function reducer(state, action) {
                 ...state,
                 status: 'active'
             }
+        case 'finish':
+            return {
+                ...state,
+                status: 'finished'
+            }
         default:
             throw new Error('Unknown action')
     }
@@ -85,8 +91,10 @@ function App() {
                 {status === 'active' && <>
                     <Progress answer={answer} possiblePoints={possiblePoints} points={points} index={index} questionsLength={questionsLength}/>
                     <Questions answer={answer} dispatch={dispatch} question={questions[index]}/>
-                    <NextButton answer={answer} dispatch={dispatch}/>
+                    <NextButton answer={answer} index={index} questionsLength={questionsLength}  dispatch={dispatch}/>
                 </>}
+                {status === 'finished' && <FinishedScreen points={points} possiblePoints={possiblePoints}/>}
+
             </Main>
         </div>
     )
