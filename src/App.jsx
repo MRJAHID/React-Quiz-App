@@ -5,12 +5,16 @@ import {useEffect, useReducer} from "react";
 import Loader from "./Loader.jsx";
 import Error from "./Error.jsx";
 import StartScreen from "./StartScreen.jsx";
+import Questions from "./Questions.jsx";
 
+// initialState of useReducer
 const initialState = {
     questions: [],
     // 'loading', 'error', 'ready', 'active', 'finished'
     status: 'loading'
 }
+
+// reducer function of useReducer
 function reducer(state, action) {
     switch (action.type) {
         case 'dataReceived':
@@ -24,10 +28,16 @@ function reducer(state, action) {
                 ...state,
                 status: 'error'
             }
+        case 'start':
+            return {
+                ...state,
+                status: 'active'
+            }
         default:
             throw new Error('Unknown action')
     }
 }
+
 function App() {
 
     const [{questions, status}, dispatch] = useReducer(reducer, initialState)
@@ -50,9 +60,10 @@ function App() {
         <div className='app'>
             <Header/>
             <Main>
-                {status=== 'loading' && <Loader/>}
-                {status=== 'error' && <Error/>}
-                {status=== 'ready' && <StartScreen questionsLength={questionsLength}/>}
+                {status === 'loading' && <Loader/>}
+                {status === 'error' && <Error/>}
+                {status === 'ready' && <StartScreen questionsLength={questionsLength} dispatch={dispatch}/>}
+                {status === 'active' && <Questions/>}
             </Main>
         </div>
     )
